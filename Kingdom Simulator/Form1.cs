@@ -12,55 +12,127 @@ namespace Kingdom_Simulator
 {
     public partial class Form1 : Form
     {
-        //kingdom stats
-        int resources = 100;
-        int riches = 100;
-        int population = 100;
-        int happiness = 100;
+        //global variables
+        string kingdomName;
 
-        //game control
-        int currentYear = 1;
-        int maxYears = 10;
-        bool gameOver = false;
+        int year;
+        int resources;
+        int riches;
+        int population;
+        int happiness;
 
-        //lists
+        List<string> decisionHistory = new List<string>();
 
         public Form1()
         {
             InitializeComponent();
+            InitializeGame();
         }
 
-       void Main(string[] args)
+        //sets up game at the start of the game
+        private void InitializeGame()
         {
-           
 
-            DisplayTitleScreen();
-            InitializeKingdom();
+            year = 0;
+            resources = 100;
+            riches = 100;
+            population = 50;
+            happiness = 50;
 
-            //main game loop
-            while (!gameOver && currentYear <= maxYears)
-            {
-
-            }
+            outputLabel.Text = "Enter your kingdom name and press Start,";
+            UpdateStatus();
+            EnableDecisionButtons(false);
         }
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            kingdomName = kingdomTextBox.Text;
+
+            if (kingdomName == "")
+            {
+                MessageBox.Show("Please enter a kingdom name.");
+                return;
+            }
+
+            year = 1;
+            outputLabel.Text = $"Welcome, ruler of {kingdomName}!";
+            EnableDecisionButtons(true);
+            UpdateStatus();
+        }
+
+        //decision buttons
+        private void decision1Button_Click(object sender, EventArgs e)
+        {
+            //collect taxes
+            riches += 20;
+            happiness -= 10;
+
+            decisionHistory.Add("Collected Taxes");
+            outputLabel.Text = "You collected taxes. Riches increased, happiness decreased";
+
+            EndOfAction();
+        }
+
+        private void decision2Button_Click(object sender, EventArgs e)
+        {
+            //build housing
+            resources -= 20;
+            population += 10;
+            happiness += 5;
+
+            decisionHistory.Add("Built Housing");
+            outputLabel.Text = "New homes were built. Population increased";
+
+            EndOfAction();
+        }
+        private void decision3Button_Click(object sender, EventArgs e)
+        {
+            //host festival
+            riches -= 15;
+            happiness += 15;
+
+            decisionHistory.Add("Hosted Festival");
+            outputLabel.Text = "A festival was held. People are happier.";
+
+            EndOfAction();
+        }
+
+        //end turn
+        private void endTurnButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
         //methods
 
-        //displays "title screen" of the program.
-        void DisplayTitleScreen()
+        private void UpdateStatus()
         {
-            label1.Text = "KINGDOM SIMULATOR";
-            
+        statusLabel.Text = $"Year: {year}\n" + $"Resources: {resources}\n" + $"Riches: {riches }\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n";
+
+        }
+    private void EnableDecisionButtons(bool enable)
+        {
+            decision1Button.Enabled = enable;
+            decision2Button.Enabled = enable;
+            decision3Button.Enabled = enable;
+            endTurnButton.Enabled = enable;
+
         }
 
-        //sets up kingdom at the start of the game
-        void InitializeKingdom()
+        private void EndOfAction()
         {
-           
-            label1.Text = "Enter the name of your kingdom: ";
-            string kingdomName = Convert.ToString(textBox1.Text);
+            UpdateStatus();
+            CheckGameOver();
 
-            label1.Text = "\n" + "Welcome, ruler of " + kingdomName + "!";
-            label1.Text = "Your reign begins now...";
+        }
+
+        private void CheckGameOver()
+        {
+
         }
     }
+
+    
+
+
+   
 }
