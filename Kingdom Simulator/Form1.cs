@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,9 @@ namespace Kingdom_Simulator
         int population;
         int happiness;
 
-        List<string> decisionHistory = new List<string>();
+        List<string> requestDescriptions = new List<string>();
+        int currentRequest;
+        Random rand = new Random();
 
         public Form1()
         {
@@ -39,9 +42,17 @@ namespace Kingdom_Simulator
             population = 50;
             happiness = 50;
 
-            outputLabel.Text = "Enter your kingdom name and press Start,";
+            requestDescriptions.Add("Farmers ask to clear land for more crops.");
+            requestDescriptions.Add("Merchants want lower taxes.");
+            requestDescriptions.Add("Villagers request a festival.");
+            requestDescriptions.Add("Builders ask for resources to repair the city walls.");
+            requestDescriptions.Add("Builders want to construct new homes for incoming citizens");
+            requestDescriptions.Add("Refugees from a nearby land ask to settle in your kingdom");
+            requestDescriptions.Add("A drought threatens crops. Farmers ask for emergency aid");
+
+            namePromptLabel.Text = "Enter your kingdom name and press Start,";
             UpdateStatus();
-            EnableDecisionButtons(false);
+            EnableRequestButtons(false);
         }
         private void startButton_Click(object sender, EventArgs e)
         {
@@ -54,52 +65,90 @@ namespace Kingdom_Simulator
             }
 
             year = 1;
-            outputLabel.Text = $"Welcome, ruler of {kingdomName}!";
-            EnableDecisionButtons(true);
+            namePromptLabel.Text = $"Welcome, ruler of {kingdomName}!";
+            EnableRequestButtons(true);
+            ShowNewRequest();
             UpdateStatus();
         }
 
-        //decision buttons
-        private void decision1Button_Click(object sender, EventArgs e)
+        //show random request
+        private void ShowNewRequest()
         {
-            //collect taxes
-            riches += 20;
-            happiness -= 10;
-
-            decisionHistory.Add("Collected Taxes");
-            outputLabel.Text = "You collected taxes. Riches increased, happiness decreased";
-
-            EndOfAction();
+            currentRequest = rand.Next(requestDescriptions.Count);
+            outputLabel.Text = requestDescriptions[currentRequest];
         }
-
-        private void decision2Button_Click(object sender, EventArgs e)
+        //approve request
+        private void approveButton_Click(object sender, EventArgs e)
         {
-            //build housing
-            resources -= 20;
-            population += 10;
-            happiness += 5;
+            switch (currentRequest)
+            {
+                case 0: 
+                    resources += 20;
+                    population -= 10;
+                    break;
+                case 1: 
+                    riches -= 10;
+                    happiness += 15;
+                    break;
+                case 2:
+                    resources -= 15;
+                    happiness += 10;
+                    break;
+                case 3:
+                    resources -= 25;
+                    population += 5;
+                    happiness += 5;
+                    break;
+                case 4:
 
-            decisionHistory.Add("Built Housing");
-            outputLabel.Text = "New homes were built. Population increased";
 
-            EndOfAction();
-        }
-        private void decision3Button_Click(object sender, EventArgs e)
+            }
+            
+            else if (currentRequest == 4)
+            {
+                resources -= 25;
+                population -= 10;
+            }
+            else { if (currentRequest == 5)
+                {
+                    resources -= 10;
+                    population += 15;
+                    outputLabel.Text = "You approved the request";
+                    EndOfAction();
+                    ShowNewRequest();
+                }
+
+        private void denyButton_Click(object sender, EventArgs e)
         {
-            //host festival
-            riches -= 15;
-            happiness += 15;
-
-            decisionHistory.Add("Hosted Festival");
-            outputLabel.Text = "A festival was held. People are happier.";
-
-            EndOfAction();
-        }
-
-        //end turn
-        private void endTurnButton_Click(object sender, EventArgs e)
-        {
-
+            if (currentRequest == 0)
+            {
+                resources -= 20;
+                happiness -= 10;
+            }
+            else if (currentRequest == 1)
+            {
+                riches += 15;
+                happiness -= 10;
+            }
+            else if (currentRequest == 2)
+            {
+                happiness -= 10;
+            }
+            else if (currentRequest == 3)
+            {
+                population -= 5;
+                happiness -= 5;
+                resources += 5;
+            }
+            else if (currentRequest == 4)
+            {
+                population -= 5;
+            }
+            else if (currentRequest == 5)
+            { happiness  -= 10;}
+            outputLabel.Text = "You denied the request";
+                EndOfAction();
+            ShowNewRequest();
         }
 
         //methods
@@ -109,13 +158,10 @@ namespace Kingdom_Simulator
         statusLabel.Text = $"Year: {year}\n" + $"Resources: {resources}\n" + $"Riches: {riches }\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n";
 
         }
-    private void EnableDecisionButtons(bool enable)
+    private void EnableRequestButtons(bool enable)
         {
-            decision1Button.Enabled = enable;
-            decision2Button.Enabled = enable;
-            decision3Button.Enabled = enable;
-            endTurnButton.Enabled = enable;
-
+            approveButton.Enabled = enable;
+            denyButton.Enabled = enable;
         }
 
         private void EndOfAction()
@@ -127,7 +173,21 @@ namespace Kingdom_Simulator
 
         private void CheckGameOver()
         {
-
+            if (population <= 0)
+            {
+                MessageBox.Show("Everyone fled because of your poor ruling :(");
+                EnableRequestButtons(false);
+            }
+            else if (happiness <= 0)
+            {
+                MessageBox.Show("The people revolted against you");
+                EnableRequestButtons(false);
+            }
+            else if (resources <= 0 || riches <= 0)
+            {
+                MessageBox.Show("Your kingdom went bankrupt");
+                EnableRequestButtons(false);
+            }
         }
     }
 
