@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Kingdom_Simulator
@@ -16,7 +17,6 @@ namespace Kingdom_Simulator
         //global variables
         string kingdomName;
 
-        int year;
         int resources;
         int riches;
         int population;
@@ -36,7 +36,6 @@ namespace Kingdom_Simulator
         private void InitializeGame()
         {
 
-            year = 0;
             resources = 100;
             riches = 100;
             population = 50;
@@ -50,7 +49,9 @@ namespace Kingdom_Simulator
             requestDescriptions.Add("Refugees from a nearby land ask to settle in your kingdom");
             requestDescriptions.Add("A drought threatens crops. Farmers ask for emergency aid");
 
-            namePromptLabel.Text = "Enter your kingdom name and press Start,";
+            endScreenPanel.Visible = false;
+            startScreenPanel.Visible = true;
+            namePromptLabel.Text = "Enter your kingdom name and press Start.";
             UpdateStatus();
             EnableRequestButtons(false);
         }
@@ -64,8 +65,10 @@ namespace Kingdom_Simulator
                 return;
             }
 
-            year = 1;
             namePromptLabel.Text = $"Welcome, ruler of {kingdomName}!";
+            Refresh();
+            Thread.Sleep(1500);
+            startScreenPanel.Visible = false;
             EnableRequestButtons(true);
             ShowNewRequest();
             UpdateStatus();
@@ -82,11 +85,11 @@ namespace Kingdom_Simulator
         {
             switch (currentRequest)
             {
-                case 0: 
+                case 0:
                     resources += 20;
                     population -= 10;
                     break;
-                case 1: 
+                case 1:
                     riches -= 10;
                     happiness += 15;
                     break;
@@ -100,54 +103,58 @@ namespace Kingdom_Simulator
                     happiness += 5;
                     break;
                 case 4:
-
-
-            }
-            
-            else if (currentRequest == 4)
-            {
-                resources -= 25;
-                population -= 10;
-            }
-            else { if (currentRequest == 5)
-                {
+                    resources -= 25;
+                    population -= 10;
+                    break;
+                case 5:
                     resources -= 10;
                     population += 15;
-                    outputLabel.Text = "You approved the request";
-                    EndOfAction();
-                    ShowNewRequest();
-                }
+                    break;
+                case 6:
+                    riches -= 15;
+                    happiness += 5;
+                    resources += 15;
+                    break;
+            }
+            outputLabel.Text = "You approved the request";
+            EndOfAction();
+            ShowNewRequest();
+        }
 
         private void denyButton_Click(object sender, EventArgs e)
         {
-            if (currentRequest == 0)
+            switch (currentRequest)
             {
-                resources -= 20;
-                happiness -= 10;
+                case 0:
+                    resources += 20;
+                    happiness -= 10;
+                    break;
+                case 1:
+                    riches += 15;
+                    happiness -= 10;
+                    break;
+                case 2:
+                    happiness -= 10;
+                    break;
+                case 3:
+                    population -= 5;
+                    happiness -= 5;
+                    resources += 5;
+                    break;
+                case 4:
+                    population -= 5;
+                    break;
+                case 5:
+                    happiness -= 10;
+                    break;
+                case 6:
+                    resources -= 25;
+                    happiness -= 15;
+                    population -= 5;
+                    break;
             }
-            else if (currentRequest == 1)
-            {
-                riches += 15;
-                happiness -= 10;
-            }
-            else if (currentRequest == 2)
-            {
-                happiness -= 10;
-            }
-            else if (currentRequest == 3)
-            {
-                population -= 5;
-                happiness -= 5;
-                resources += 5;
-            }
-            else if (currentRequest == 4)
-            {
-                population -= 5;
-            }
-            else if (currentRequest == 5)
-            { happiness  -= 10;}
             outputLabel.Text = "You denied the request";
-                EndOfAction();
+            EndOfAction();
             ShowNewRequest();
         }
 
@@ -155,10 +162,10 @@ namespace Kingdom_Simulator
 
         private void UpdateStatus()
         {
-        statusLabel.Text = $"Year: {year}\n" + $"Resources: {resources}\n" + $"Riches: {riches }\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n";
+            statusLabel.Text = $"Resources: {resources}\n" + $"Riches: {riches}\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n";
 
         }
-    private void EnableRequestButtons(bool enable)
+        private void EnableRequestButtons(bool enable)
         {
             approveButton.Enabled = enable;
             denyButton.Enabled = enable;
@@ -175,24 +182,29 @@ namespace Kingdom_Simulator
         {
             if (population <= 0)
             {
-                MessageBox.Show("Everyone fled because of your poor ruling :(");
-                EnableRequestButtons(false);
+                EndGame("Everyone fled because of your poor ruling :(");
             }
             else if (happiness <= 0)
             {
-                MessageBox.Show("The people revolted against you");
-                EnableRequestButtons(false);
+                EndGame("The people revolted against you");
             }
             else if (resources <= 0 || riches <= 0)
             {
-                MessageBox.Show("Your kingdom went bankrupt");
-                EnableRequestButtons(false);
+                EndGame("Your kingdom went bankrupt");
             }
+        }
+
+        private void EndGame(string endingMessage)
+        {
+            endLabel.Text = "Your Reign Has Ended";
+            summaryLabel.Text = endingMessage + $"\n\nFinal Stats:\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n" + $"Riches: {riches}\n" + $"Resources: {resources}\n";
+
+            endScreenPanel.Visible = true;
         }
     }
 
-    
 
 
-   
+
+
 }

@@ -39,8 +39,15 @@
             this.namePromptLabel = new System.Windows.Forms.Label();
             this.statsPanel = new System.Windows.Forms.Panel();
             this.requestPanel = new System.Windows.Forms.Panel();
+            this.startScreenPanel = new System.Windows.Forms.Panel();
+            this.endScreenPanel = new System.Windows.Forms.Panel();
+            this.subtitleLabel = new System.Windows.Forms.Label();
+            this.endLabel = new System.Windows.Forms.Label();
+            this.summaryLabel = new System.Windows.Forms.Label();
             this.statsPanel.SuspendLayout();
             this.requestPanel.SuspendLayout();
+            this.startScreenPanel.SuspendLayout();
+            this.endScreenPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusLabel
@@ -88,9 +95,10 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(564, 77);
+            this.startButton.Font = new System.Drawing.Font("Consolas", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startButton.Location = new System.Drawing.Point(298, 257);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(111, 35);
+            this.startButton.Size = new System.Drawing.Size(231, 81);
             this.startButton.TabIndex = 4;
             this.startButton.Text = "Start Reign";
             this.startButton.UseVisualStyleBackColor = true;
@@ -98,9 +106,9 @@
             // 
             // kingdomTextBox
             // 
-            this.kingdomTextBox.Location = new System.Drawing.Point(306, 83);
+            this.kingdomTextBox.Location = new System.Drawing.Point(311, 139);
             this.kingdomTextBox.Name = "kingdomTextBox";
-            this.kingdomTextBox.Size = new System.Drawing.Size(200, 22);
+            this.kingdomTextBox.Size = new System.Drawing.Size(200, 23);
             this.kingdomTextBox.TabIndex = 1;
             // 
             // titleLabel
@@ -116,11 +124,12 @@
             // 
             // namePromptLabel
             // 
-            this.namePromptLabel.Location = new System.Drawing.Point(-2, 82);
+            this.namePromptLabel.Font = new System.Drawing.Font("Consolas", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.namePromptLabel.Location = new System.Drawing.Point(139, 89);
             this.namePromptLabel.Name = "namePromptLabel";
-            this.namePromptLabel.Size = new System.Drawing.Size(279, 23);
+            this.namePromptLabel.Size = new System.Drawing.Size(529, 35);
             this.namePromptLabel.TabIndex = 7;
-            this.namePromptLabel.Text = "label1";
+            this.namePromptLabel.Text = "Enter your kingdom name and press Start";
             this.namePromptLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // statsPanel
@@ -141,19 +150,70 @@
             this.requestPanel.Size = new System.Drawing.Size(200, 100);
             this.requestPanel.TabIndex = 9;
             // 
+            // startScreenPanel
+            // 
+            this.startScreenPanel.Controls.Add(this.endScreenPanel);
+            this.startScreenPanel.Controls.Add(this.subtitleLabel);
+            this.startScreenPanel.Controls.Add(this.namePromptLabel);
+            this.startScreenPanel.Controls.Add(this.kingdomTextBox);
+            this.startScreenPanel.Controls.Add(this.startButton);
+            this.startScreenPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.startScreenPanel.Font = new System.Drawing.Font("Consolas", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startScreenPanel.Location = new System.Drawing.Point(0, 60);
+            this.startScreenPanel.Name = "startScreenPanel";
+            this.startScreenPanel.Size = new System.Drawing.Size(782, 393);
+            this.startScreenPanel.TabIndex = 10;
+            // 
+            // endScreenPanel
+            // 
+            this.endScreenPanel.Controls.Add(this.summaryLabel);
+            this.endScreenPanel.Controls.Add(this.endLabel);
+            this.endScreenPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.endScreenPanel.Location = new System.Drawing.Point(0, 0);
+            this.endScreenPanel.Name = "endScreenPanel";
+            this.endScreenPanel.Size = new System.Drawing.Size(782, 393);
+            this.endScreenPanel.TabIndex = 8;
+            // 
+            // subtitleLabel
+            // 
+            this.subtitleLabel.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.subtitleLabel.Location = new System.Drawing.Point(1, 0);
+            this.subtitleLabel.Name = "subtitleLabel";
+            this.subtitleLabel.Size = new System.Drawing.Size(781, 22);
+            this.subtitleLabel.TabIndex = 0;
+            this.subtitleLabel.Text = "Rule wisely or watch your kingdom fall.";
+            this.subtitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // endLabel
+            // 
+            this.endLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.endLabel.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.endLabel.Location = new System.Drawing.Point(0, 0);
+            this.endLabel.Name = "endLabel";
+            this.endLabel.Size = new System.Drawing.Size(782, 38);
+            this.endLabel.TabIndex = 0;
+            this.endLabel.Text = "label1";
+            this.endLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // summaryLabel
+            // 
+            this.summaryLabel.Location = new System.Drawing.Point(295, 57);
+            this.summaryLabel.Name = "summaryLabel";
+            this.summaryLabel.Size = new System.Drawing.Size(195, 167);
+            this.summaryLabel.TabIndex = 1;
+            this.summaryLabel.Text = "label1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FloralWhite;
             this.ClientSize = new System.Drawing.Size(782, 453);
+            this.Controls.Add(this.startScreenPanel);
             this.Controls.Add(this.requestPanel);
             this.Controls.Add(this.statsPanel);
-            this.Controls.Add(this.namePromptLabel);
             this.Controls.Add(this.denyButton);
             this.Controls.Add(this.approveButton);
-            this.Controls.Add(this.startButton);
-            this.Controls.Add(this.kingdomTextBox);
             this.Controls.Add(this.titleLabel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
@@ -161,8 +221,10 @@
             this.Text = "Kingdom Simulator";
             this.statsPanel.ResumeLayout(false);
             this.requestPanel.ResumeLayout(false);
+            this.startScreenPanel.ResumeLayout(false);
+            this.startScreenPanel.PerformLayout();
+            this.endScreenPanel.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -174,9 +236,14 @@
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.TextBox kingdomTextBox;
         private System.Windows.Forms.Label titleLabel;
-        private System.Windows.Forms.Label namePromptLabel;
         private System.Windows.Forms.Panel statsPanel;
         private System.Windows.Forms.Panel requestPanel;
+        private System.Windows.Forms.Panel startScreenPanel;
+        private System.Windows.Forms.Label subtitleLabel;
+        private System.Windows.Forms.Label namePromptLabel;
+        private System.Windows.Forms.Panel endScreenPanel;
+        private System.Windows.Forms.Label endLabel;
+        private System.Windows.Forms.Label summaryLabel;
     }
 }
 
