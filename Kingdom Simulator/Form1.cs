@@ -10,20 +10,29 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 
+//Kingdom Simulator
+//Sydney V.
+//Simulator game where you make choices as a ruler to maintain a kingdom
 namespace Kingdom_Simulator
 {
     public partial class Form1 : Form
     {
         //global variables
+
+        //holds the kingdom name
         string kingdomName;
 
+        //stats
         int resources;
         int riches;
         int population;
         int happiness;
 
+        //list for possible requests
         List<string> requestDescriptions = new List<string>();
+        //keeps track of which request is chosen
         int currentRequest;
+        //random number generator for selecting request
         Random rand = new Random();
 
         public Form1()
@@ -49,9 +58,9 @@ namespace Kingdom_Simulator
             requestDescriptions.Add("Refugees from a nearby land ask to settle in your kingdom");
             requestDescriptions.Add("A drought threatens crops. Farmers ask for emergency aid");
 
-            endScreenPanel.Visible = false;
             startScreenPanel.Visible = true;
             namePromptLabel.Text = "Enter your kingdom name and press Start.";
+            startButton.Text = "Start";
             UpdateStatus();
             EnableRequestButtons(false);
         }
@@ -80,7 +89,7 @@ namespace Kingdom_Simulator
             currentRequest = rand.Next(requestDescriptions.Count);
             outputLabel.Text = requestDescriptions[currentRequest];
         }
-        //approve request
+        //approves request and applies stat affects
         private void approveButton_Click(object sender, EventArgs e)
         {
             switch (currentRequest)
@@ -121,6 +130,7 @@ namespace Kingdom_Simulator
             ShowNewRequest();
         }
 
+        //denies request and applies stat affects
         private void denyButton_Click(object sender, EventArgs e)
         {
             switch (currentRequest)
@@ -158,19 +168,21 @@ namespace Kingdom_Simulator
             ShowNewRequest();
         }
 
-        //methods
-
+        //updates stats to display proper numbers
         private void UpdateStatus()
         {
             statusLabel.Text = $"Resources: {resources}\n" + $"Riches: {riches}\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n";
 
         }
+
+        //enables buttons if true and disables buttons when false
         private void EnableRequestButtons(bool enable)
         {
             approveButton.Enabled = enable;
             denyButton.Enabled = enable;
         }
 
+        //calls upon UpdateStatus() and CheckGameOver() after every action
         private void EndOfAction()
         {
             UpdateStatus();
@@ -178,6 +190,7 @@ namespace Kingdom_Simulator
 
         }
 
+        //checks to see if any stats are equal to or less than zero and determines end message
         private void CheckGameOver()
         {
             if (population <= 0)
@@ -194,12 +207,19 @@ namespace Kingdom_Simulator
             }
         }
 
+        //ends the game, displays ending message and final statistics, and resets stats
         private void EndGame(string endingMessage)
         {
-            endLabel.Text = "Your Reign Has Ended";
-            summaryLabel.Text = endingMessage + $"\n\nFinal Stats:\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n" + $"Riches: {riches}\n" + $"Resources: {resources}\n";
+            startScreenPanel.Visible = true;
+            namePromptLabel.Text = endingMessage + $"\n\nFinal Stats:\n" + $"Population: {population}\n" + $"Happiness: {happiness}\n" + $"Riches: {riches}\n" + $"Resources: {resources}\n";
+            kingdomTextBox.Visible = false;
+            startButton.Text = "Restart";
 
-            endScreenPanel.Visible = true;
+            resources = 100;
+            riches = 100;
+            population = 50;
+            happiness = 50;
+
         }
     }
 
